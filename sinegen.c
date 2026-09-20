@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 #define PI 3.141592653589793
+#define DEFAULT_LINEBREAK 15
 
 /*this value can be either of the following types:  | double | float | long double | */
 const char tableType[] = "double";
@@ -108,10 +109,10 @@ int printSinInt_toFile(unsigned long sinSampleSize, unsigned long maxNumPerLine,
 
 
 int main(int argc, char* argv[]){
-    if (argc != 5 && argc != 4 && argc != 3) {return 1;}
+    if (argc > 5) {return 1;}
 
     unsigned long sinSampleSize = strtol(argv[1], NULL, 10);
-    unsigned long maxNumPerLine = strtol(argv[2], NULL, 10);
+    unsigned long maxNumPerLine = (argc > 2) ? strtol(argv[2], NULL, 10) : DEFAULT_LINEBREAK;
     if (argc > 3){
         unsigned long maximumVal = strtol(argv[3], NULL, 10);
         unsigned long piOver2 = argc == 5 ? strtol(argv[4], NULL, 10) : (long)( (double)maximumVal * (PI / 2));
