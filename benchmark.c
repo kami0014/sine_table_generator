@@ -6,7 +6,7 @@
 #define TESTVAL 0.005
 
 int benchmark(){
-    long double d;
+    volatile long double d;
     int i, j;
     double time1, time2, time3, time4;
 
