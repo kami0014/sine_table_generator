@@ -61,8 +61,8 @@ int printSin_toFile(unsigned long sinSampleSize, unsigned long maxNumPerLine){
         fprintf(outp, "%c", ( ((idx+1)%maxNumPerLine) == 0) ? "\n"[0] : " "[0]);
     }
     fprintf(outp, "1.0");
-    fprintf(outp, "\n};\nsinType* SinTable = &(SinTable_static[0]);\n\nstatic sinType negInf = -1.0/0.0;\nstatic sinType posInf = 1.0/0.0;\n\n");
-    fprintf(outp, "sinType sin_table(const sinType angle){\n\tunsigned long index, div, trueIndex;\n\tif(angle != angle || angle == posInf || angle == negInf) return 0.0;\n\tindex =  (unsigned long)(SIN_TABLE_SIZE * angle  * 2.0 / (PI));\n\tdiv = index / SIN_TABLE_SIZE;\n\ttrueIndex = index - div * SIN_TABLE_SIZE;\n\tswitch ( div & 0b11 ){\n\t\tcase 0: return  SinTable[trueIndex];\n\t\tcase 1: return  SinTable[SIN_TABLE_SIZE - trueIndex];\n\t\tcase 2: return -SinTable[trueIndex];\n\t\tcase 3: return -SinTable[SIN_TABLE_SIZE - trueIndex];\n\t\tdefault: return 0.0;\n\t}\n}\n");
+    fprintf(outp, "\n};\nsinType* SinTable = &(SinTable_static[0]);\n\n");
+    fprintf(outp, "sinType sin_table(const sinType angle){\n\tstatic const sinType negInf = -1.0/0.0;\n\tstatic const sinType posInf = 1.0/0.0;\n\tunsigned long index, div, trueIndex;\n\tif(angle != angle || angle == posInf || angle == negInf) return 0.0;\n\tindex =  (unsigned long)(SIN_TABLE_SIZE * angle  * 2.0 / (PI));\n\tdiv = index / SIN_TABLE_SIZE;\n\ttrueIndex = index - div * SIN_TABLE_SIZE;\n\tswitch ( div & 0b11 ){\n\t\tcase 0: return  SinTable[trueIndex];\n\t\tcase 1: return  SinTable[SIN_TABLE_SIZE - trueIndex];\n\t\tcase 2: return -SinTable[trueIndex];\n\t\tcase 3: return -SinTable[SIN_TABLE_SIZE - trueIndex];\n\t\tdefault: return 0.0;\n\t}\n}\n");
     fprintf(outp, "\n#endif");
     free(SinTable);
     fclose(outp);
