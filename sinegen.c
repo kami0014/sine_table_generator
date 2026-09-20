@@ -118,7 +118,7 @@ int main(int argc, char* argv[]){
         unsigned long piOver2 = argc == 5 ? strtol(argv[4], NULL, 10) : (long)( (double)maximumVal * (PI / 2));
         return printSinInt_toFile(sinSampleSize, maxNumPerLine, maximumVal, piOver2);
     }
-    else if (argc == 3) return printSin_toFile(sinSampleSize, maxNumPerLine);
+    else return printSin_toFile(sinSampleSize, maxNumPerLine);
     return 2;
 }
 
