@@ -53,7 +53,7 @@ int printSin_toFile(unsigned long sinSampleSize, unsigned long maxNumPerLine){
         return -1;
     }
     FILE* outp = fopen("sin_table.h", "w");
-    fprintf(outp, "#ifndef SIN_TABLE\n#define SIN_TABLE\n#define SIN_TABLE_SIZE %u\n#define PI %.20lf\n#define LOWEST_ANGLE_DELTA %.32Lf\n\nstatic %s SinTable_static[%u] = {\n", sinSampleSize, PI, (long double)90.0 / sinSampleSize, tableType, sinSampleSize+1);
+    fprintf(outp, "#ifndef SIN_TABLE\n#define SIN_TABLE\n#define SIN_TABLE_SIZE %u\n#define PI %.20lf\n#define LOWEST_ANGLE_DELTA %.32Lf\n\ntypedef %s sinType;\nstatic sinType SinTable_static[%u] = {\n", sinSampleSize, PI, (long double)90.0 / sinSampleSize, tableType, sinSampleSize+1);
     for (unsigned long idx = 0; idx < sinSampleSize; idx++ )
     {
         fprintf(outp, "\t"); if (SinTable[idx] >= 0.0) fprintf(outp, " ");
@@ -61,8 +61,8 @@ int printSin_toFile(unsigned long sinSampleSize, unsigned long maxNumPerLine){
         fprintf(outp, "%c", ( ((idx+1)%maxNumPerLine) == 0) ? "\n"[0] : " "[0]);
     }
     fprintf(outp, "1.0");
-    fprintf(outp, "\n};\n%s* SinTable = &(SinTable_static[0]);\n\nstatic %s negInf = -1.0/0.0;\nstatic %s posInf = 1.0/0.0;\n\n", tableType, tableType, tableType);
-    fprintf(outp, "%s sin_table(const %s angle){\n\tunsigned long index, div, trueIndex;\n\tif(angle != angle || angle == posInf || angle == negInf) return 0.0;\n\tindex =  (unsigned long)(SIN_TABLE_SIZE * angle  * 2.0 / (PI));\n\tdiv = index / SIN_TABLE_SIZE;\n\ttrueIndex = index - div * SIN_TABLE_SIZE;\n\tswitch ( div & 0b11 ){\n\t\tcase 0: return  SinTable[trueIndex];\n\t\tcase 1: return  SinTable[SIN_TABLE_SIZE - trueIndex];\n\t\tcase 2: return -SinTable[trueIndex];\n\t\tcase 3: return -SinTable[SIN_TABLE_SIZE - trueIndex];\n\t\tdefault: return 0.0;\n\t}\n}\n", tableType, tableType);
+    fprintf(outp, "\n};\nsinType* SinTable = &(SinTable_static[0]);\n\nstatic sinType negInf = -1.0/0.0;\nstatic sinType posInf = 1.0/0.0;\n\n");
+    fprintf(outp, "sinType sin_table(const sinType angle){\n\tunsigned long index, div, trueIndex;\n\tif(angle != angle || angle == posInf || angle == negInf) return 0.0;\n\tindex =  (unsigned long)(SIN_TABLE_SIZE * angle  * 2.0 / (PI));\n\tdiv = index / SIN_TABLE_SIZE;\n\ttrueIndex = index - div * SIN_TABLE_SIZE;\n\tswitch ( div & 0b11 ){\n\t\tcase 0: return  SinTable[trueIndex];\n\t\tcase 1: return  SinTable[SIN_TABLE_SIZE - trueIndex];\n\t\tcase 2: return -SinTable[trueIndex];\n\t\tcase 3: return -SinTable[SIN_TABLE_SIZE - trueIndex];\n\t\tdefault: return 0.0;\n\t}\n}\n");
     fprintf(outp, "\n#endif");
     free(SinTable);
     fclose(outp);
